@@ -1,0 +1,9 @@
+---
+- name: Nginx | Installation
+  include: "pkgmgr/{{ ansible_pkg_mgr }}.yml"
+
+- name: Nginx | Ensure Nginx service is enabled and started
+  service:
+    name: nginx
+    enabled: yes
+    state: started

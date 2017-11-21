@@ -1,0 +1,5 @@
+---
+- name: Nginx | YUM | Ensure Nginx package is installed
+  yum:
+    name: nginx
+    state: present

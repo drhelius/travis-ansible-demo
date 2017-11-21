@@ -1,0 +1,29 @@
+---
+galaxy_info:
+  author: Ignacio Sanchez Gines
+  description: Demo role for installing Nginx on multiple platforms
+  company:
+  license: license (MIT)
+  min_ansible_version: 2.0.0
+  issue_tracker_url: https://github.com/drhelius/travis-ansible-demo/issues
+  github_branch: master
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+        - trusty
+    - name: Debian
+      versions:
+        - stretch
+        - jessie
+    - name: EL
+      versions:
+        - 7
+    - name: Fedora
+      versions:
+        - 26
+        - 25
+        - 24
+
+dependencies: []

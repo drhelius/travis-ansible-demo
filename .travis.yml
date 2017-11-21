@@ -1,0 +1,39 @@
+---
+sudo: required
+
+env:
+  - distribution: centos
+    version: 7
+  - distribution: fedora
+    version: 26
+  - distribution: fedora
+    version: 25
+  - distribution: fedora
+    version: 24
+  - distribution: ubuntu
+    version: xenial
+  - distribution: ubuntu
+    version: trusty
+  - distribution: debian
+    version: stretch
+  - distribution: debian
+    version: jessie
+
+services:
+  - docker
+
+before_install:
+  - 'sudo docker pull ${distribution}:${version}'
+  - 'sudo docker build --no-cache --rm --file=travis/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:ansible travis'
+
+script:
+  - container_id=$(mktemp)
+  - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/nginx_role:ro ${distribution}-${version}:ansible > "${container_id}"'
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -v /etc/ansible/roles/nginx_role/travis/test.yml --syntax-check'
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook -v /etc/ansible/roles/nginx_role/travis/test.yml'
+  - >
+    sudo docker exec "$(cat ${container_id})" ansible-playbook -v /etc/ansible/roles/nginx_role/travis/test.yml
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+  - 'sudo docker rm -f "$(cat ${container_id})"'

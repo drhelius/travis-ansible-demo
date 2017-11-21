@@ -1,0 +1,5 @@
+---
+- name: Nginx | DNF | Ensure Nginx package is installed
+  dnf:
+    name: nginx
+    state: present

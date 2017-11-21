@@ -1,0 +1,5 @@
+---
+- name: Nginx | APT | Ensure Nginx package is installed
+  apt:
+    name: nginx
+    state: present
